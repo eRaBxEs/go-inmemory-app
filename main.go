@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"net/http"
 )
 
 var kv = map[string]interface{}{}
@@ -39,5 +40,12 @@ func (i *InMemoryStore) Del(key string) {
 }
 
 func main() {
-	fmt.Println("Hello inMemory app")
+	http.HandleFunc("/set", setHandler)
+	http.HandleFunc("/get", getHandler)
+	http.HandleFunc("/del", delHandler)
+
+	log.Print("Server running on :8888")
+	if err := http.ListenAndServe(":8888", nil); err != nil {
+		log.Printf("Server shutting down: %v", err)
+	}
 }
